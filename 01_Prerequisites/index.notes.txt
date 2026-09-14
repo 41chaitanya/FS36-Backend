@@ -1,0 +1,639 @@
+```javascript
+/*
+===========================================================
+        JAVASCRIPT OOP — BASIC COMPLETE EXAMPLE
+===========================================================
+
+OOP = Object-Oriented Programming
+
+Topics covered:
+
+1. Object
+2. Constructor
+   - Constructor without class
+   - Constructor with class
+3. Class
+4. Fields / Properties
+   - Fields inside constructor
+   - Public fields
+   - Private fields
+5. Methods
+   - Instance methods
+   - Static methods
+6. this keyword
+7. new keyword
+8. Access Modifiers
+   - Public
+   - Private
+   - Protected (no native support)
+9. Encapsulation
+10. Inheritance
+    - extends
+    - super
+11. Polymorphism
+    - Runtime polymorphism
+    - Compile-time polymorphism
+*/
+
+
+// =========================================================
+// 1. OBJECT
+// =========================================================
+
+// An object represents a real-world entity or an entity
+// modeled inside our application.
+
+const userObject = {
+
+    name: "Chaitanya",
+    age: 67,
+
+    login() {
+        console.log(this.name);
+        console.log(this.age);
+    }
+};
+
+userObject.login();
+
+
+// Object contains:
+//
+// Data
+//  ├── name
+//  └── age
+//
+// Behavior
+//  └── login()
+
+
+
+// =========================================================
+// 2. CONSTRUCTOR WITHOUT CLASS
+//    Constructor Function
+// =========================================================
+
+// Before class syntax, JavaScript commonly used
+// constructor functions to create multiple objects.
+
+function UserWithoutClass(name, email) {
+
+    // Fields / Properties
+    this.name = name;
+    this.email = email;
+}
+
+
+// new creates a new object and makes `this` refer
+// to that new object while the constructor runs.
+
+const user1 = new UserWithoutClass(
+    "Rahul",
+    "rahul@gmail.com"
+);
+
+const user2 = new UserWithoutClass(
+    "Amit",
+    "amit@gmail.com"
+);
+
+console.log(user1.name);
+console.log(user2.name);
+
+
+
+// =========================================================
+// 3. CLASS
+// =========================================================
+
+// A class is a blueprint/template for creating objects.
+
+class User {
+
+    // =====================================================
+    // 4. FIELDS / PROPERTIES
+    // =====================================================
+
+    // Public field
+    role = "user";
+
+
+    // Private field
+    // This can only be accessed inside the class.
+    #password = "12345";
+
+
+    // =====================================================
+    // CONSTRUCTOR WITH CLASS
+    // =====================================================
+
+    constructor(name, email) {
+
+        // Fields created inside constructor
+
+        this.name = name;
+        this.email = email;
+    }
+
+
+    // =====================================================
+    // 5. INSTANCE METHODS
+    // =====================================================
+
+    login() {
+
+        console.log(`${this.name} logged in`);
+    }
+
+
+    logout() {
+
+        console.log(`${this.name} logged out`);
+    }
+
+
+    // Method accessing private field
+
+    showPassword() {
+
+        console.log(this.#password);
+    }
+
+
+    // =====================================================
+    // 6. STATIC METHOD
+    // =====================================================
+
+    static createGuest() {
+
+        return new User(
+            "Guest",
+            "guest@gmail.com"
+        );
+    }
+}
+
+
+
+// =========================================================
+// 7. NEW KEYWORD
+// =========================================================
+
+// `new` creates an object from the class.
+
+const user3 = new User(
+    "Chaitanya",
+    "chaitanya@gmail.com"
+);
+
+
+// user3 is an object/instance of User.
+
+console.log(user3);
+
+
+
+// =========================================================
+// 8. THIS KEYWORD
+// =========================================================
+
+// `this` refers to the current object/instance
+// when the method is called as an object method.
+
+console.log(user3.name);
+console.log(user3.email);
+
+user3.login();
+
+
+// Conceptually:
+//
+// user3.login()
+//
+// this → user3
+//
+// therefore:
+//
+// this.name
+//
+// means:
+//
+// user3.name
+
+
+
+// =========================================================
+// 9. ACCESS MODIFIERS
+// =========================================================
+
+
+// -------------------------
+// PUBLIC
+// -------------------------
+
+// JavaScript class members are public by default.
+
+console.log(user3.name);
+console.log(user3.email);
+console.log(user3.role);
+
+
+// -------------------------
+// PRIVATE
+// -------------------------
+
+// #password is private.
+//
+// We CANNOT do:
+//
+// console.log(user3.#password);
+//
+// That would cause an error.
+//
+// Instead, we access it through a class method.
+
+user3.showPassword();
+
+
+// -------------------------
+// PROTECTED
+// -------------------------
+
+// JavaScript has NO native `protected` keyword.
+//
+// A common convention is:
+//
+// this._name
+//
+// Example:
+
+class Example {
+
+    constructor() {
+
+        // Technically PUBLIC.
+        // `_` only communicates:
+//      "This is intended for internal use."
+
+        this._name = "Rahul";
+    }
+}
+
+const example = new Example();
+
+console.log(example._name);
+
+
+
+// =========================================================
+// 10. ENCAPSULATION
+// =========================================================
+
+// Encapsulation means keeping data and behavior together
+// and controlling access to internal data.
+
+class BankAccount {
+
+    // Private field
+    #balance = 0;
+
+
+    // Public method
+    deposit(amount) {
+
+        if (amount > 0) {
+
+            this.#balance += amount;
+        }
+    }
+
+
+    // Public method
+    withdraw(amount) {
+
+        if (amount > 0 && amount <= this.#balance) {
+
+            this.#balance -= amount;
+        }
+    }
+
+
+    // Public method to safely read private data
+    getBalance() {
+
+        return this.#balance;
+    }
+}
+
+
+const account = new BankAccount();
+
+account.deposit(1000);
+
+account.withdraw(300);
+
+console.log(account.getBalance());
+
+
+// We cannot directly access:
+//
+// account.#balance
+//
+// The balance is encapsulated inside BankAccount.
+
+
+
+// =========================================================
+// 11. INHERITANCE
+// =========================================================
+
+// A child class can inherit from a parent class.
+//
+// Parent:
+//      User
+//
+// Child:
+//      Admin
+
+class Admin extends User {
+
+    constructor(name, email, permissions) {
+
+        // super() calls the parent constructor.
+
+        super(name, email);
+
+        this.permissions = permissions;
+    }
+
+
+    deleteUser() {
+
+        console.log(`${this.name} deleted a user`);
+    }
+}
+
+
+const admin = new Admin(
+    "Chaitanya",
+    "admin@gmail.com",
+    ["create", "delete", "update"]
+);
+
+
+// Admin gets properties/behavior from User.
+
+console.log(admin.name);
+console.log(admin.email);
+
+admin.login();
+
+
+// Admin also has its own functionality.
+
+admin.deleteUser();
+
+
+
+// =========================================================
+// EXTENDS
+// =========================================================
+
+// class Admin extends User
+//
+// means:
+//
+// Admin IS-A User
+//
+// Admin inherits from User.
+
+
+
+// =========================================================
+// SUPER
+// =========================================================
+
+// In:
+//
+// super(name, email)
+//
+// the child class calls the parent constructor.
+//
+// Parent:
+//
+// User
+//
+// Child:
+//
+// Admin
+
+
+
+// =========================================================
+// 12. POLYMORPHISM
+// =========================================================
+
+// Polymorphism means:
+//
+// Same method/interface
+// +
+// Different behavior.
+
+
+
+// Parent class
+
+class Employee {
+
+    work() {
+
+        console.log("Employee is working");
+    }
+}
+
+
+// Child class
+
+class Developer extends Employee {
+
+    work() {
+
+        console.log("Developer is writing code");
+    }
+}
+
+
+// Another child class
+
+class Designer extends Employee {
+
+    work() {
+
+        console.log("Designer is designing UI");
+    }
+}
+
+
+const developer = new Developer();
+
+const designer = new Designer();
+
+developer.work();
+
+designer.work();
+
+
+// Same method:
+//
+// work()
+//
+// Different behavior:
+//
+// Developer → writing code
+// Designer  → designing UI
+
+
+
+// =========================================================
+// RUNTIME POLYMORPHISM
+// =========================================================
+
+// JavaScript primarily demonstrates polymorphism
+// at runtime through method overriding / dynamic behavior.
+
+function startWork(employee) {
+
+    employee.work();
+}
+
+
+startWork(developer);
+
+startWork(designer);
+
+
+// The function does not need to know whether the object is:
+//
+// Developer
+// or
+// Designer
+//
+// It simply calls:
+//
+// employee.work()
+//
+// The actual method is determined at runtime.
+
+
+
+// =========================================================
+// COMPILE-TIME POLYMORPHISM
+// =========================================================
+
+// JavaScript does NOT support traditional compile-time
+// method overloading like Java/C++.
+//
+// For example, Java allows:
+//
+// add(int a, int b)
+// add(int a, int b, int c)
+//
+// JavaScript does not have this kind of method overloading.
+//
+// Instead, JavaScript can achieve similar behavior using
+// optional parameters, rest parameters, etc.
+
+class Calculator {
+
+    add(a, b, c) {
+
+        if (c !== undefined) {
+
+            return a + b + c;
+        }
+
+        return a + b;
+    }
+}
+
+
+const calculator = new Calculator();
+
+console.log(calculator.add(10, 20));
+
+console.log(calculator.add(10, 20, 30));
+
+
+// This is NOT true compile-time polymorphism.
+// It is simply JavaScript handling different arguments
+// at runtime.
+
+
+
+// =========================================================
+// STATIC METHOD
+// =========================================================
+
+// Static methods belong to the CLASS,
+// not to individual objects.
+
+const guest = User.createGuest();
+
+console.log(guest.name);
+console.log(guest.email);
+
+
+// Correct:
+//
+// User.createGuest()
+
+
+// Incorrect:
+//
+// guest.createGuest()
+
+
+
+// =========================================================
+// FINAL OOP STRUCTURE
+// =========================================================
+//
+// OOP
+//  │
+//  ├── Object
+//  │
+//  ├── Constructor
+//  │     ├── Constructor Function
+//  │     └── constructor()
+//  │
+//  ├── Class
+//  │
+//  ├── Fields / Properties
+//  │     ├── Constructor fields
+//  │     ├── Public fields
+//  │     └── Private fields
+//  │
+//  ├── Methods
+//  │     ├── Instance methods
+//  │     └── Static methods
+//  │
+//  ├── this
+//  │
+//  ├── new
+//  │
+//  ├── Access Modifiers
+//  │     ├── Public
+//  │     ├── Private
+//  │     └── Protected (no native support)
+//  │
+//  ├── Encapsulation
+//  │
+//  ├── Inheritance
+//  │     ├── extends
+//  │     └── super
+//  │
+//  └── Polymorphism
+//        ├── Runtime
+//        └── Compile-time
+//            (not natively supported like Java)
+```
