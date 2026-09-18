@@ -60,24 +60,24 @@ const firstServer = http.createServer((req, res) => {
     // password
    
     
-    else if(req.method==="POST"&&req.url === "/login"){
-        const data=''
-        res.on("data",(chunk)=>{
-            data=data+chunk.toString()
+    // else if(req.method==="POST"&&req.url === "/login"){
+    //     const data=''
+    //     res.on("data",(chunk)=>{
+    //         data=data+chunk.toString()
 
-        })
-
-
-        
-        const actualData=JSON.parse(data)
-        console.log(actualData.email)
-        console.log(actualData.password)
-        res.end({email:actualData.email,password:actualData.password})
-
+    //     })
 
 
         
-    }
+    //     const actualData=JSON.parse(data)
+    //     console.log(actualData.email)
+    //     console.log(actualData.password)
+    //     res.end({email:actualData.email,password:actualData.password})
+
+
+
+        
+    // }
     
     
     
